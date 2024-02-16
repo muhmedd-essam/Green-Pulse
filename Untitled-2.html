@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>try </title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                url: "http://localhost:8000/api/index/posts",
+                type: "GET",
+                headers: {
+                    "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzAxMjQzNTUwLCJuYmYiOjE3MDEyNDM1NTAsImp0aSI6IkR0RHMxN2hrOEhhOVl6RGIiLCJzdWIiOiIxIiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.13w0iydBh2LphJ4POyxRJNkpEKPEPXc9YlVaQXB2ps4"
+                },
+                success: function(data) {
+                    var source = $("#posts-template").html();
+                    var template = Handlebars.compile(source);
+                    var html = template({ posts: data["data of posts"] });
+                    $("#posts-container").html(html);
+                },
+                error: function() {
+                    alert("حدث خطأ أثناء استرداد البيانات من الـ API.");
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <div id="posts-container"></div>
+
+    <script id="posts-template" type="text/x-handlebars-template">
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Description</th>
+                <th>User</th>
+                <th>Image</th>
+            </tr>
+            {{#each posts}}
+            <tr>
+                <td>{{id}}</td>
+                <td>{{description}}</td>
+                <td>{{user.name}}</td>
+                <td><img src="http://localhost/GreenInnoSphere/storage/app/{{images}}" width="100" height="100"></td>
+            </tr>
+            {{/each}}
+        </table>
+    </script>
+</body>
+</html>
